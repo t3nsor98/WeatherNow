@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 const APi_KEY = import.meta.env.VITE_API_KEY;
+const OpenCageAPI_KEY = import.meta.env.VITE_OPENCAGE_API_KEY;
 
 const useWeather = (defaultCity = "Fetching") => {
   const [city, setCity] = useState(defaultCity);
@@ -36,6 +37,21 @@ const useWeather = (defaultCity = "Fetching") => {
       setLoading(false);
     }
   };
+
+  //   a function to get the users location from browser
+  const getUserLocation = () => {
+    if("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+            async(position)=> {
+                const {latitude,longitude} = position.coords;
+
+                try{
+                    const geoRes = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${}`);
+                }
+            }
+        )
+    }
+  }
 };
 
 export default useWeather;
