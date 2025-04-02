@@ -3,9 +3,6 @@ import { useState, useEffect } from "react";
 const API_KEY = import.meta.env.VITE_API_KEY;
 const OpenCageAPI_KEY = import.meta.env.VITE_OPEN_CAGE_API_KEY;
 
-// console.log("Using OpenCage API Key:", OpenCageAPI_KEY);
-// console.log("Using Weather API Key:", API_KEY);
-
 const useWeather = (defaultCity = "Fetching") => {
   const [city, setCity] = useState(defaultCity);
   const [weather, setWeather] = useState(null);
