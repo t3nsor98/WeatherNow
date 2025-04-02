@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
-const OpenCageAPI_KEY = import.meta.env.VITE_OPENCAGE_API_KEY;
+const OpenCageAPI_KEY = import.meta.env.VITE_OPEN_CAGE_API_KEY;
+
+// console.log("Using OpenCage API Key:", OpenCageAPI_KEY);
+// console.log("Using Weather API Key:", API_KEY);
 
 const useWeather = (defaultCity = "Fetching") => {
   const [city, setCity] = useState(defaultCity);
@@ -45,10 +48,22 @@ const useWeather = (defaultCity = "Fetching") => {
           const { latitude, longitude } = position.coords;
 
           try {
-            const geoRes = await fetch(
-              `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${OpenCageAPI_KEY}`
-            );
+            const apiUrl = `https://api.opencagedata.com/geocode/v1/json`;
+            const requestUrl = `${apiUrl}?key=${OpenCageAPI_KEY}&q=${encodeURIComponent(
+              `${latitude},${longitude}`
+            )}&pretty=1&no_annotations=1`;
+
+            const geoRes = await fetch(requestUrl);
+            if (!geoRes.ok) {
+              const errorData = await geoRes.json();
+              setError(
+                `Error fetching location data: ${geoRes.status} - ${errorData.status.message}`
+              );
+              return;
+            }
+
             const geoData = await geoRes.json();
+            console.log("Geocoding response:", geoData);
 
             if (!geoData.results || geoData.results.length === 0) {
               setError("Could not fetch location data.");
