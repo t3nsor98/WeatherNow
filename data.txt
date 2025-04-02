@@ -1,0 +1,57 @@
+{
+  request: {
+    type: 'City',
+    query: 'Bhubaneswar, India',
+    language: 'en',
+    unit: 'm'
+  },
+  location: {
+    name: 'Bhubaneswar',
+    country: 'India',
+    region: 'Orissa',
+    lat: '20.233',
+    lon: '85.833',
+    timezone_id: 'Asia/Kolkata',
+    localtime: '2025-04-02 16:17',
+    localtime_epoch: 1743610620,
+    utc_offset: '5.50'
+  },
+  current: {
+    observation_time: '10:47 AM',
+    temperature: 31,
+    weather_code: 143,
+    weather_icons: [
+      'https://cdn.worldweatheronline.com/images/wsymbols01_png_64/wsymbol_0006_mist.png'
+    ],
+    weather_descriptions: [ 'Haze' ],
+    astro: {
+      sunrise: '05:40 AM',
+      sunset: '06:01 PM',
+      moonrise: '08:27 AM',
+      moonset: '10:25 PM',
+      moon_phase: 'Waxing Crescent',
+      moon_illumination: 18
+    },
+    air_quality: {
+      co: '370',
+      no2: '2.775',
+      o3: '103',
+      so2: '7.03',
+      pm2_5: '35.15',
+      pm10: '42.365',
+      'us-epa-index': '2',
+      'gb-defra-index': '2'
+    },
+    wind_speed: 24,
+    wind_degree: 177,
+    wind_dir: 'S',
+    pressure: 1008,
+    precip: 0,
+    humidity: 63,
+    cloudcover: 50,
+    feelslike: 32,
+    uv_index: 1,
+    visibility: 5,
+    is_day: 'yes'
+  }
+}
