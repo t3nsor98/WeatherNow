@@ -1,22 +1,21 @@
 import { useState, useEffect } from "react";
 
-const APi_KEY = import.meta.env.VITE_API_KEY;
+const API_KEY = import.meta.env.VITE_API_KEY;
 const OpenCageAPI_KEY = import.meta.env.VITE_OPENCAGE_API_KEY;
 
 const useWeather = (defaultCity = "Fetching") => {
   const [city, setCity] = useState(defaultCity);
   const [weather, setWeather] = useState(null);
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  //a function to fetch weather data of the city
-
+  // Function to fetch weather data for a city
   const fetchWeather = async (cityName) => {
     setLoading(true);
-    SpeechSynthesisErrorEvent(null);
+    setError(null);
 
     try {
-      const apiUrl = `http://api.weatherstack.com/current?access_key=${API_KEY}&query=${encodeURIComponent(
+      const apiUrl = `https://api.weatherstack.com/current?access_key=${API_KEY}&query=${encodeURIComponent(
         cityName
       )}`;
       const response = await fetch(apiUrl);
@@ -26,7 +25,7 @@ const useWeather = (defaultCity = "Fetching") => {
       }
       const data = await response.json();
       if (data.error) {
-        throw new Error(data.error.info || "City not found ! 404");
+        throw new Error(data.error.info || "City not found! 404");
       }
 
       setWeather(data);
@@ -38,20 +37,52 @@ const useWeather = (defaultCity = "Fetching") => {
     }
   };
 
-  //   a function to get the users location from browser
+  // Function to get the user's location from the browser
   const getUserLocation = () => {
-    if("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(
-            async(position)=> {
-                const {latitude,longitude} = position.coords;
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
 
-                try{
-                    const geoRes = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${}`);
-                }
+          try {
+            const geoRes = await fetch(
+              `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${OpenCageAPI_KEY}`
+            );
+            const geoData = await geoRes.json();
+
+            if (!geoData.results || geoData.results.length === 0) {
+              setError("Could not fetch location data.");
+              return;
             }
-        )
+
+            const detectedCity =
+              geoData.results[0].components.city ||
+              geoData.results[0].components.town ||
+              geoData.results[0].components.village;
+
+            if (detectedCity) {
+              fetchWeather(detectedCity);
+            } else {
+              setError("Could not detect city.");
+            }
+          } catch (err) {
+            setError(`Error fetching city name: ${err.message}`);
+          }
+        },
+        (error) => {
+          setError(`Location access denied: ${error.message}`);
+        }
+      );
+    } else {
+      setError("Geolocation not supported");
     }
-  }
+  };
+
+  useEffect(() => {
+    getUserLocation();
+  }, []);
+
+  return { city, weather, loading, error, fetchWeather, getUserLocation };
 };
 
 export default useWeather;
