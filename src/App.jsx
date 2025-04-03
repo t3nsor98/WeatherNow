@@ -2,13 +2,14 @@ import React, { useEffect } from "react";
 import useWeather from "./hooks/useWeather";
 import WeatherCard from "./components/weatherCard";
 
-const DEFAULT_CITY = "New Delhi"; // Define default city as a constant
+const DEFAULT_CITY = "New Delhi"; 
 
 const App = () => {
   const { weather, loading, error, fetchWeather, getUserLocation } = useWeather();
 
   useEffect(() => {
-    // Attempt to get user's location; fallback to default city if it fails
+    // Attempt to get user's location; 
+    // fallback to default city if it fails
     getUserLocation();
     fetchWeather(DEFAULT_CITY);
   }, []);
