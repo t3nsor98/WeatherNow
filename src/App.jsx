@@ -2,16 +2,22 @@ import React, { useEffect } from "react";
 import useWeather from "./hooks/useWeather";
 import WeatherCard from "./components/weatherCard";
 
-const DEFAULT_CITY = "New Delhi"; 
+const DEFAULT_CITY = "New Delhi";
 
 const App = () => {
   const { weather, loading, error, fetchWeather, getUserLocation } = useWeather();
 
   useEffect(() => {
-    // Attempt to get user's location; 
-    // fallback to default city if it fails
-    getUserLocation();
-    fetchWeather(DEFAULT_CITY);
+    // Attempt to get user's location and fetch weather data
+    const fetchWeatherData = async () => {
+      const locationSuccess = await getUserLocation();
+      if (!locationSuccess) {
+        // Fallback to default city if geolocation fails
+        fetchWeather(DEFAULT_CITY);
+      }
+    };
+
+    fetchWeatherData();
   }, []);
 
   return (
