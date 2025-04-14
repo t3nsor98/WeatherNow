@@ -8,7 +8,7 @@ const App = () => {
   const { weather, loading, error, fetchWeather, getUserLocation } = useWeather();
 
   useEffect(() => {
-    // Attempt to get user's location and fetch weather data
+    // Attempt to get user's location and fetch weather data to reduce api request
     const fetchWeatherData = async () => {
       const locationSuccess = await getUserLocation();
       if (!locationSuccess) {
